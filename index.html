@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.socket.io/4.4.1/socket.io.min.js" integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous"></script>
+  <title>Ink Email</title>
+</head>
+<body>
+  <div class="container">
+      <div class="item">
+        <span>Endereço  de  e-mail  do  destinatário</span>
+        <input type="email" placeholder="e-mail..." id="email" autocomplete="off"/>
+      </div>
+
+      <div class="item">
+        <span>Assunto da mensagem</span>
+        <input type="text" placeholder="assunto..." id="assunto" autocomplete="off" />
+      </div>
+
+      <div class="item">
+        <span>Mensagem</span>
+        <textarea id="mensagem" style="resize: none;" autocomplete="false"></textarea>
+      </div>
+      
+      <button id="button">Enviar e-mail</button>
+  </div>
+  <div class="modal" id="success-modal">
+    <div class="modal-item">
+      🥳
+      <p>Seu e-mail foi enviado com sucesso</p>
+      <button id="button-modal">Fechar</button>
+    </div>
+  </div>
+</body>
+
+<script>
+  const email = document.getElementById('email');
+  const assunto = document.getElementById('assunto');
+  const mensagem = document.getElementById('mensagem');
+  const modal = document.getElementById("success-modal");
+
+  const button = document.getElementById('button');
+  const closeModal = document.getElementById('button-modal');
+
+
+  const dados = {};
+  const socket = io('http://localhost:4000')
+
+  button.onclick = () => {
+    if (!dados.email || !dados.assunto || !dados.mensagem) {
+      alert('Todos os campos são obrigatórios');
+      return;
+    }
+    socket.emit('data', dados);
+    modal.style.top = "0px"; 
+
+  }
+
+  closeModal.onclick = () => {
+    modal.style.top = "-500px";
+  }
+
+  email.onchange = (e) => {
+    dados.email = e.target.value;
+  }
+
+  assunto.onchange = (e) => {
+    dados.assunto = e.target.value;
+  }
+
+  mensagem.onchange = (e) => {
+    dados.mensagem = e.target.value;
+  }
+
+</script>
+</html>
