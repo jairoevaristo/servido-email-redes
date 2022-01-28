@@ -9,6 +9,7 @@
   <title>Ink Email</title>
 </head>
 <body>
+  <h1>Ink E-mail</h1>
   <div class="container">
       <div class="item">
         <span>Endereço  de  e-mail  do  destinatário</span>
@@ -55,8 +56,11 @@
       return;
     }
     socket.emit('data', dados);
-    modal.style.top = "0px"; 
-
+    modal.style.top = "0px";
+    
+    email.value = '';
+    assunto.value = '';
+    mensagem.value = '';
   }
 
   closeModal.onclick = () => {
