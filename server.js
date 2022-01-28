@@ -1,7 +1,7 @@
-import { Server } from "socket.io";
-import http from "http";
+const { Server } = require("socket.io");
+const http = require("http");
 
-import { api } from "./services/api";
+const api = require("./services/api");
 
 let dataResult = "";
 
