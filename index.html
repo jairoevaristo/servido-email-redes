@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.socket.io/4.4.1/socket.io.min.js" integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous"></script>
-  <title>Ink Email</title>
+  <title>Ink Email - Envie seus e-maisl de forma mais simples e rápida</title>
 </head>
 <body>
   <h1>Ink E-mail</h1>
@@ -56,6 +56,8 @@
       alert('Todos os campos são obrigatórios');
       return;
     }
+    const id = Math.floor(Math.random() * 1000000);
+    dados.id = id;
     socket.emit('data', dados);
     modal.style.top = "0px";
     

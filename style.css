@@ -158,6 +158,20 @@ p {
   position: relative;
 }
 
+.delete {
+  position: absolute;
+  right: 5px;
+  width: .9rem;
+  height: 1rem;
+  border-radius: 4px;
+  background-color: red;
+  color: #fff;
+  font-size: .6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 span {
   width: 100%;
   max-width: 11.3rem;

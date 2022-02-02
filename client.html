@@ -6,7 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.socket.io/4.4.1/socket.io.min.js" integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous"></script>
-  <title>Ink Email</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <title>Caixa de E-mail Ink</title>
 </head>
 <body>
   <h1 class="caixa-entrada">Caixa de Entrada</h1>
@@ -17,27 +19,77 @@
 
 <script>
   const socket = io('http://localhost:4000');
+
   const container = document.querySelector('.containerMail');
   const empty = document.querySelector(".empty");
   const caixaEntrada = document.querySelector(".caixa-entrada");
 
-  const emails = []
+  let emails = [];
 
   socket.on('new-email', function(args) {
     if (emails.length <= 0) {
       container.innerHTML = '';
     }
+    
     emails.push(args);
-    renderEmail(args);
-    caixaEntrada.innerHTML = `Caixa de Entrada (${emails.length})`;
+    renderEmail(args)
+    
+    if (emails.length <= 0) {
+      caixaEntrada.innerHTML = `Caixa de Entrada`;
+      const h1 = document.createElement('h2');
+      h1.textContent = 'Sem e-mail na caixa'
+      h1.classList.add('empty');
+      container.appendChild(h1);
+      return;
+    }
+    caixaEntrada.innerHTML = `Caixa de Entrada (${emails.length})`
   })
 
-  function renderEmail(args) {
-      container.innerHTML += `
-      <div class="wrapper">
-        <h5>${args.assunto}</h5>
-        <span class="mensagem">${args.mensagem}</span>
-      </div>`
+  const buttonDeleteF = (id) => {
+    axios.post('http://localhost:4000/delete/app', {
+    id,
+  })
+  .then(function (response) {
+    container.innerHTML = '';
+    response.data.data.forEach(element => {
+      renderEmail(element)
+    });
+    emails = [...response.data.data]
+    if (emails.length <= 0) {
+      caixaEntrada.innerHTML = `Caixa de Entrada`;
+      const h1 = document.createElement('h2');
+      h1.textContent = 'Sem e-mail na caixa'
+      h1.classList.add('empty');
+      container.appendChild(h1);
+      return;
+    }
+    caixaEntrada.innerHTML = `Caixa de Entrada (${emails.length})`
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+  }
+
+  function renderEmail(email) {
+      const divContainer = document.createElement('div');
+      const h1 = document.createElement('h6');
+      const span = document.createElement('span');
+      const buttonDelete = document.createElement('button');
+
+      h1.textContent = email.assunto;
+      span.textContent = email.mensagem;
+      buttonDelete.textContent = 'X';
+
+      divContainer.appendChild(h1);
+      divContainer.appendChild(span);
+      divContainer.appendChild(buttonDelete);
+
+      divContainer.classList.add('wrapper');
+      span.classList.add('mensagem');
+      buttonDelete.classList.add('delete');
+      buttonDelete.onclick = () => buttonDeleteF(email.id)
+      
+      container.appendChild(divContainer);
   }
 
 </script>
