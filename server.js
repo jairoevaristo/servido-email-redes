@@ -13,6 +13,7 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
+  console.log(`Um novo usuário se conectou com o ID:${socket.id}`);
   socket.on("data", async (data) => {
     if (data) {
       io.emit("new-email", data);
